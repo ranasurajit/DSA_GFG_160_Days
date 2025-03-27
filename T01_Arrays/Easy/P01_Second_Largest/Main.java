@@ -1,8 +1,6 @@
 //{ Driver Code Starts
 // Initial Template for Java
-import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -18,6 +16,7 @@ public class Main {
 
             System.out.println("~");
         }
+        sc.close();
     }
 }
 
@@ -28,13 +27,15 @@ public class Main {
 
 class Solution {
     /**
+     * Approach II : Using Simple Iteration
+     * 
      * TC: O(N)
      * SC: O(1)
      */
     public int getSecondLargest(int[] arr) {
         int n = arr.length;
-        int first = Integer.MIN_VALUE;
-        int second = 0;
+        int first = -1;
+        int second = -1;
         for (int i = 0; i < n; i++) { // TC: O(N)
             if (first < arr[i]) {
                 second = first;
@@ -43,6 +44,25 @@ class Solution {
                 second = arr[i];
             }
         }
-        return second == Integer.MIN_VALUE ? -1 : second;
+        return second;
+    }
+
+    /**
+     * Approach I : Using Max-Heap (PriorityQueue) Approach
+     * 
+     * TC: O(2 x N x log(N)) ~ O(N x log(N))
+     * SC: O(N)
+     */
+    public int getSecondLargestApproachI(int[] arr) {
+        int n = arr.length;
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>((p, q) -> q - p); // SC: O(N)
+        for (int i = 0; i < n; i++) { // TC: O(N)
+            pq.offer(arr[i]); // TC: O(log(N))
+        }
+        int first = pq.poll();
+        while (!pq.isEmpty() && pq.peek() == first) { // TC: O(N)
+            pq.poll(); // TC: O(log(N))
+        }
+        return pq.isEmpty() ? -1 : pq.poll();
     }
 }
